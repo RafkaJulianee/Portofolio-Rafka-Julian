@@ -116,3 +116,58 @@ navigationLinks.forEach((navLink, linkIndex) => {
     }
   });
 });
+
+
+
+// project lightbox
+const lightbox = document.getElementById("projectLightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxTitle = document.getElementById("lightboxTitle");
+const lightboxCategory = document.getElementById("lightboxCategory");
+const lightboxClose = document.getElementById("lightboxClose");
+const lightboxOverlay = document.querySelector(".lightbox-overlay");
+
+// open lightbox when clicking a project item
+const projectItems = document.querySelectorAll(".project-item > a");
+
+projectItems.forEach(function (item) {
+  item.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const img = this.querySelector(".project-img img");
+    const title = this.querySelector(".project-title");
+    const category = this.querySelector(".project-category");
+
+    if (img && lightbox) {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxTitle.textContent = title ? title.textContent : "";
+      lightboxCategory.textContent = category ? category.textContent : "";
+      lightbox.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+  });
+});
+
+// close lightbox
+function closeLightbox() {
+  if (lightbox) {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+}
+
+if (lightboxClose) {
+  lightboxClose.addEventListener("click", closeLightbox);
+}
+
+if (lightboxOverlay) {
+  lightboxOverlay.addEventListener("click", closeLightbox);
+}
+
+// close with Escape key
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && lightbox && lightbox.classList.contains("active")) {
+    closeLightbox();
+  }
+});
