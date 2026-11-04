@@ -47,13 +47,15 @@ const pages = document.querySelectorAll("[data-page]");
 
 // alias map for Indonesian / English page names
 const pageAliases = {
+  "home": "home",
+  "beranda": "home",
   "tentang": "about",
   "tentang saya": "about",
   "about": "about",
   "about me": "about",
-  "resume": "resume",
-  "riwayat": "resume",
-  "cv": "resume",
+  "resume": "home",
+  "riwayat": "home",
+  "cv": "home",
   "portfolio": "portfolio",
   "portofolio": "portfolio",
   "projek": "portfolio",
@@ -65,39 +67,52 @@ const pageAliases = {
   "hubungi saya": "contact"
 };
 
+// function to navigate to a target page
+const navigateToPage = function (targetPage) {
+  const normalizedTarget = pageAliases[targetPage] || targetPage;
+
+  pages.forEach((page) => {
+    if (page.dataset.page.toLowerCase() === normalizedTarget) {
+      page.classList.add("active");
+      page.scrollTop = 0;
+    } else {
+      page.classList.remove("active");
+    }
+  });
+
+  // Update navbar links active state
+  const navbarLinks = document.querySelectorAll(".navbar-link");
+  navbarLinks.forEach((link) => {
+    const linkTarget = link.dataset.navLink || link.dataset.navTarget || pageAliases[link.textContent.trim().toLowerCase()] || link.textContent.trim().toLowerCase();
+    if (linkTarget === normalizedTarget) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
+
+  window.scrollTo(0, 0);
+};
+
 // add event to all nav links
 navigationLinks.forEach((navLink, linkIndex) => {
   navLink.addEventListener("click", function () {
     const rawText = this.textContent.trim().toLowerCase();
     const targetPage = this.dataset.navLink || this.dataset.navTarget || pageAliases[rawText] || rawText;
 
-    let pageMatched = false;
-
-    // First try matching targetPage against data-page
-    pages.forEach((page) => {
-      if (page.dataset.page.toLowerCase() === targetPage) {
-        page.classList.add("active");
-        pageMatched = true;
-      } else {
-        page.classList.remove("active");
+    const normalizedTarget = pageAliases[targetPage] || targetPage;
+    let pageFound = false;
+    for (let p = 0; p < pages.length; p++) {
+      if (pages[p].dataset.page.toLowerCase() === normalizedTarget) {
+        pageFound = true;
+        break;
       }
-    });
-
-    // Fallback: match by link index if name did not match directly
-    if (!pageMatched && pages[linkIndex]) {
-      pages.forEach((page, pageIndex) => {
-        if (pageIndex === linkIndex) {
-          page.classList.add("active");
-        } else {
-          page.classList.remove("active");
-        }
-      });
     }
 
-    // Set active class on navbar buttons
-    navigationLinks.forEach(link => link.classList.remove("active"));
-    this.classList.add("active");
-
-    window.scrollTo(0, 0);
+    if (pageFound) {
+      navigateToPage(normalizedTarget);
+    } else if (pages[linkIndex]) {
+      navigateToPage(pages[linkIndex].dataset.page);
+    }
   });
 });
