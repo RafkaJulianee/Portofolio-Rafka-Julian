@@ -434,6 +434,31 @@ main {
   font-size: var(--fs-7);
 }
 
+.contact-info :is(.contact-link) {
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--jet) transparent;
+  padding-bottom: 2px;
+}
+
+.contact-info :is(.contact-link)::-webkit-scrollbar {
+  height: 4px;
+}
+
+.contact-info :is(.contact-link)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contact-info :is(.contact-link)::-webkit-scrollbar-thumb {
+  background: var(--jet);
+  border-radius: 4px;
+}
+
+.contact-info :is(.contact-link)::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-yellow-crayola);
+}
+
 .contact-info address { font-style: normal; }
 
 .social-list {
@@ -2002,8 +2027,8 @@ main {
 
   .contact-info :is(.contact-link) {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-x: auto;
+    text-overflow: clip;
   }
 
   .contact-info :is(.contact-link, time, address) {
