@@ -124,6 +124,7 @@ const lightbox = document.getElementById("projectLightbox");
 const lightboxImg = document.getElementById("lightboxImg");
 const lightboxTitle = document.getElementById("lightboxTitle");
 const lightboxCategory = document.getElementById("lightboxCategory");
+const lightboxDesc = document.getElementById("lightboxDesc");
 const lightboxClose = document.getElementById("lightboxClose");
 const lightboxOverlay = document.querySelector(".lightbox-overlay");
 
@@ -137,12 +138,16 @@ projectItems.forEach(function (item) {
     const img = this.querySelector(".project-img img");
     const title = this.querySelector(".project-title");
     const category = this.querySelector(".project-category");
+    const description = this.dataset.description || "";
 
     if (img && lightbox) {
       lightboxImg.src = img.src;
       lightboxImg.alt = img.alt;
       lightboxTitle.textContent = title ? title.textContent : "";
       lightboxCategory.textContent = category ? category.textContent : "";
+      if (lightboxDesc) {
+        lightboxDesc.textContent = description;
+      }
       lightbox.classList.add("active");
       document.body.style.overflow = "hidden";
     }
